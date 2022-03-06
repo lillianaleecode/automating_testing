@@ -9,6 +9,7 @@ describe('My First Puppeteer Test', () => {
         const page = await browser.newPage() 
         await page.goto('https://code.berlin/en/')//go to the URL page
         await page.waitForSelector('p') //find a p tag or throw an error
+        //await page.waitFor(3000) //passing the amount of time i want to wait for
         await browser.close() //close browser after finishing the script
     })
 })
