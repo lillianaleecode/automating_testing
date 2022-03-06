@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer')
 describe('My First Puppeteer Test', () => {
     it('should lauch the browser', async function() {
-        const browser = await puppeteer.launch({headless: false})
+        const browser = await puppeteer.launch({headless: false, slowMo: 50})
         const page = await browser.newPage() 
         await page.goto('https://code.berlin/en/')//go to the URL page
         await page.waitForSelector('p') //find a p tag or throw an error
