@@ -2,33 +2,7 @@ const puppeteer = require('puppeteer')
 
 var url = 'https://www.bild.de';
 
-async function run () {
 
-    try {
-        const browser = await puppeteer.launch({
-            headless: true,
-            args: ['--no-sandbox']
-        });
-        const page = await browser.newPage();
-        await page.goto(url);
-    
-        const flashVariableName = await page.evaluate( () => {
-            var start = document.documentElement.innerHTML.indexOf('ASCDP') //+ 'ASCDP '.length;
-            var tempDoc = document.documentElement.innerHTML.substring(start);
-            return  tempDoc;
-        });
-    
-            //console.log(await page.evaluate( (flashVariableName) => flashVariableName ));
-            console.log(await page.evaluate( (flashVariableName) => flashVariableName, flashVariableName ));
-    
-            await browser.close();
-            console.log("Fin del testing!!!!!!")
-        } catch(e){
-            console.log("Error Occurred", e)
-        }
-    }
-    
-    run();
 
 describe('Puppeteer for AdTech', () => {
     it('should lauch the browser', async function() {
@@ -50,6 +24,22 @@ describe('Puppeteer for AdTech', () => {
 
         const ads = await page.evaluate("adSSetup"); //retrieves the adSetup
         console.log(ads);
+
+        console.log("code for retrieving web console messages: ");
+
+        page.on("console", consoleObj => console.log(consoleObj.text())); //this code doesnt work.
+
+        const msgPromise = new Promise((resolve) => {
+            page.on('console', resolve);
+          });
+        await page.evaluate('console.log("message")');
+        const msg = await msgPromise;
+        console.log({
+        product,
+        type: msg.type(),
+        text: msg.text(),
+        args: msg.args(),
+        });
 
        // console.log(await page.evaluate(() => "bild.js"));
 
