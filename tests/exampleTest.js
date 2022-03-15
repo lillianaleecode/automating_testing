@@ -27,6 +27,8 @@ describe('Puppeteer for AdTech', () => {
 
         console.log("code for retrieving web console messages: ");
 
+        
+
         page.on("console", consoleObj => console.log(consoleObj.text())); //this code doesnt work.
 
         const msgPromise = new Promise((resolve) => {
@@ -35,11 +37,18 @@ describe('Puppeteer for AdTech', () => {
         await page.evaluate('console.log("message")');
         const msg = await msgPromise;
         console.log({
-        product,
+        
         type: msg.type(),
         text: msg.text(),
         args: msg.args(),
+        stacktrace: msg.stacktrace(),
+        location: msg.location(),
         });
+
+        page.on('response', response =>
+        console.log(`${response.status()} ${response.url()}`)) //tells what the page has rendered
+
+        
 
        // console.log(await page.evaluate(() => "bild.js"));
 
@@ -58,4 +67,5 @@ describe('Puppeteer for AdTech', () => {
 
 //to run this, we add this in the package.json
 //to run this terminal: npm run test
+//to filter things
 
