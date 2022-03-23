@@ -1,3 +1,5 @@
+// Get Console messages from the Web
+
 const puppeteer = require('puppeteer')
 
 var url = 'https://www.bild.de';
@@ -13,8 +15,11 @@ describe('Puppeteer for AdTech', () => {
         })
         const page = await browser.newPage() 
 
+// EventListener for console messages - this code runs every time a console message is written
         page.on('console', async (msg) => {
             const msgArgs = msg.args();
+            var location = msg.location();
+
             // for (let i = 0; i < msgArgs.length; ++i) {
             //   console.log(await msgArgs[i].jsonValue());
             // } 
@@ -22,12 +27,22 @@ describe('Puppeteer for AdTech', () => {
             //console.log(msg.type());
             //console.log(msg.text());
             //console.log(msg.args());
-            if (msg.text().includes("AdLib")){
-                console.log(msg.location());
-            console.log(msg.stackTrace());
-            } 
 
-            
+            // Find source from which the message is fired
+            var source = "unknown";
+            if (typeof location == "object" && location.url != "") {
+            source = location.url;
+            }
+            // give out every console message
+            //console.log("console." + msg._type + "(" + msg._text + ") from source: " + source);
+
+            // filter console messages for source
+            if (source.includes("www.asadcdn.com")) {
+                //console.log("msg.location(): ", msg.location());
+                //console.log("msg.stackTrace(): ", msg.stackTrace());
+                console.log("[Message from Adlib]: console." + msg._type + "(\"" + msg._text + "\")   from source: " + source);
+            }
+
         
           });
 
@@ -48,57 +63,10 @@ describe('Puppeteer for AdTech', () => {
 
         ////
 
-        console.log("code for retrieving url and http requests: ");
-
-        //page.on('console', message =>
-       // console.log(`${message.type().substring(0, 3).toUpperCase()} ${message.text()}`))
-
         
-
-
-
-       /*  page.on('pageerror', ({ message }) => console.log(message))
-
-        page.on('response', response =>
-        console.log(`${response.status()} ${response.url()}`))
-
-        page.on('requestfailed', request =>
-        console.log(`${request.failure().errorText} ${request.url()}`)) */
-
-        ////
-
-/*
-        const msgPromise = new Promise((resolve) => {
-            page.on('console', resolve);
-          });
-        //await page.evaluate('console.log("message")');
-        const msg = await msgPromise;
-        console.log({
-        
-        type: msg.type(),
-        text: msg.text(),
-        args: msg.args(),
-        //stacktrace: msg.stacktrace(),
-        //location: msg.location(),
-        });
-
-        */
-        
-
-        
-       // console.log(await page.evaluate(() => "bild.js"));
-        //const adJsFile = await page.content('bild.js'); //retrieves the website but not the bild.js file..
-       // console.log(adJsFile);
-
-
-        //await page.goBack()
-        //await page.waitFor(3000) //passing the amount of time i want to wait for
-        //await page.reload() //reload browser
-        //await browser.close() //close browser after finishing the script
     })
 })
 
-//to run this, we add this in the package.json
 //to run this terminal: npm run test
-//to filter things
+
 
