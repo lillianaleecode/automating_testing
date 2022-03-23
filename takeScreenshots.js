@@ -1,5 +1,5 @@
 // Taking Screenshots
-
+const fs = require('fs');
 const puppeteer = require('puppeteer')
 
 var url = 'https://www.bild.de';
@@ -33,13 +33,21 @@ describe('Taking Screenshots', () => {
         const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear + " " + Date.now();
         // "day-month-2022"
 
+//creating a folder
+//there is no puppeteer function to create automatically a folder. it is necessary to use node Fs method.
+        const path = `tests/screenshots/${dateString}`;
+
+        fs.mkdirSync(path);
+
         await page.screenshot({ 
             //path: `screenshot${Date.now()}.png`,
-            path: `screenshot${dateString}.png`,
+            path: `${path}/SiteAdded.png`,
             type: "jpeg",
             fullPage: true,
 
          });
+
+
 
         
         const title = await page.title()
@@ -47,6 +55,8 @@ describe('Taking Screenshots', () => {
 
         console.log('Title: ' + title)
         console.log('URL: ' + urlLink)
+
+
 
   
         
