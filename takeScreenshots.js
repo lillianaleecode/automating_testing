@@ -22,7 +22,24 @@ describe('Taking Screenshots', () => {
             //deviceScaleFactor: 1 
         });
 
+//get the current timestamp, stringify it and use it as file name for the screenshot
 
+        const currentDate = new Date();
+
+        const currentDayOfMonth = currentDate.getDate();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+
+        const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
+        // "day-month-2022"
+
+        await page.screenshot({ 
+            //path: `screenshot${Date.now()}.png`,
+            path: `screenshot${dateString}.png`,
+            type: "jpeg",
+            fullPage: true,
+
+         });
 
         
         const title = await page.title()
