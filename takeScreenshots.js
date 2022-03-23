@@ -30,7 +30,7 @@ describe('Taking Screenshots', () => {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
 
-        const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
+        const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear + " " + Date.now();
         // "day-month-2022"
 
         await page.screenshot({ 
