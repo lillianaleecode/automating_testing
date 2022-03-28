@@ -10,14 +10,14 @@ describe('Taking Screenshots', () => {
     it('screenshot', async function() {
         const browser = await puppeteer.launch({
             headless: false,
-            devtools: true
+            devtools: false,
         })
         const page = await browser.newPage() 
 
         await page.goto(url)
         
         await page.setViewport({ 
-            width: 1300, 
+            width: 1600, 
             height: 2000, 
             //deviceScaleFactor: 1 
         });
@@ -30,7 +30,7 @@ describe('Taking Screenshots', () => {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
 
-        const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear + " " + Date.now();
+        const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear ;
         // "day-month-2022"
 
 //creating a folder
@@ -41,13 +41,13 @@ describe('Taking Screenshots', () => {
 
         await page.screenshot({ 
             //path: `screenshot${Date.now()}.png`,
-            path: `${path}/SiteAdded.png`,
+            path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
             type: "jpeg",
             fullPage: true,
 
          });
 
-
+//
 
         
         const title = await page.title()
