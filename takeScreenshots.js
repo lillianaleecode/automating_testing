@@ -23,6 +23,8 @@ describe('Taking Screenshots', () => {
             //deviceScaleFactor: 1 
         });
 
+
+
 //get the current timestamp, stringify it and use it as file name for the screenshot
 
         const currentDate = new Date();

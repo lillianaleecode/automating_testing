@@ -62,18 +62,7 @@ describe('Puppeteer for AdTech', () => {
         // console.log(ads);
 
         ////
-        // get a list of all elements - same as document.querySelectorAll('*')
-        const elements = await page.$$('*')
 
-        for (let i = 0; i < elements.length; i++) {
-        try {
-            // get screenshot of a particular element
-            await elements[i].screenshot({path: `${i}.png`})
-        } catch(e) {
-            // if element is 'not visible', spit out error and continue
-            console.log(`couldnt take screenshot of element with index: ${i}. cause: `,  e)
-        }
-        }
 
         
     })
