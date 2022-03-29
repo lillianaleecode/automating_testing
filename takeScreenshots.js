@@ -16,7 +16,7 @@ describe('Taking Screenshots', () => {
         const page = await browser.newPage() 
 
         await page.goto(url, {
-            waitUntil: 'networkidle2' //networkidle2 works better than load, domcontentloaded or networkidle0
+            waitUntil: 'networkidle2' //Wait for all non-lazy loaded images to load. networkidle2 works better than load, domcontentloaded or networkidle0
           });
 
         
@@ -48,6 +48,7 @@ describe('Taking Screenshots', () => {
             process.exit();
         }
        
+        
 
 //get the current timestamp, stringify it and use it as file name for the screenshot
 
@@ -79,10 +80,10 @@ describe('Taking Screenshots', () => {
          await page.screenshot({
             path: `${path}/Partial Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
             'clip': {
-                'x': 40, 
-                'y': 21360, 
-                'width': 1200, 
-                'height': 560}
+                'x': 600, 
+                'y': 0, 
+                'width': 650, 
+                'height': 650}
         });   
 
          // Screenshot Emulate of an iPhone X
@@ -99,88 +100,6 @@ describe('Taking Screenshots', () => {
 
          
   
-       
-
-        //Screenshot of specific element
-        // const selectors_desktop = ["#superbanner", "#mrec", "#billboard", "#sky"]
-        // const selectors_mobile = ["#banner", "#mrec", "#inpage"]
-
-
-         //const select = await page.waitForSelector('#mrec_btf')
-         //await page.setViewport({ width: 375, height: 812 });
-        // await select.screenshot({path: `${path}/Screenshot from mobile ${" " + dateString + " " + Date.now()} .png`,})
-         
-        //   await page.waitForSelector('#mrec');          // wait for the selector to load
-        //   const element = await page.$('#mrec');        // declare a variable with an ElementHandle
-        //   await element.screenshot({path: 'elementscreenshot.png'});
-                                 
-
-
-
-        //  for (let index = 0; index < select.length; index++) {
-        //      const x = select[index];
-        //      await select.screenshot({ 
-        //                     path: `${path}/Screenshot of an element ${" " + dateString + " " + Date.now()} .png`,
-        //                     type: "png",
-        //                  })
-
-             
-        //  }
-
-        //function for getting the element 
-        // describe("taking screenshot single element",()=>{
-        //     it("element screenshot", async function(){
-        //         const select = await page.getAttribute("#mrec")
-        //         await select.screenshot({ 
-        //             path: `${path}/Screenshot of an element ${" " + dateString + " " + Date.now()} .png`,
-        //             type: "png",
-        //          })
-        //     })
-        // })
-         
-
-
-        //  let id = document.getElementsByTagName("div").id;
-        //  document.getElementById("mrec").innerHTML = id;
-        //  await select.screenshot({ 
-        //          path: `${path}/Screenshot of an element ${" " + dateString + " " + Date.now()} .png`,
-        //          type: "png",
-        //         })
-
-
-
-
-         //const matches = document.querySelectorAll("#superbanner")
-        //  const select = element.getAttribute("#mrec")
-        //  await select.screenshot({ 
-        //      path: `${path}/Screenshot of an element ${" " + dateString + " " + Date.now()} .png`,
-        //      type: "png",
-        //     })
-
-        //  for (const x of selectors_desktop ){
-        //     var elem = document.getElementById(x)
-        //     elem == true
-        //     console.log("found:" + x)
-        //     ;
-        // }
-
-        // get a list of all elements - same as document.querySelectorAll('*')
-        // const elements = await page.$$('#mrec')
-
-        // for (let i = 0; i < elements.length; i++) {
-        // try {
-        //     // get screenshot of a particular element
-        //     await elements[i].screenshot({path: `${i}.png`})
-        // } catch(e) {
-        //     // if element is 'not visible', spit out error and continue
-        //     console.log(`couldnt take screenshot of element with index: ${i}. cause: `,  e)
-        // }
-        // }
-
-    
-
-//
-
         
         const title = await page.title()
         const urlLink = await page.url()
