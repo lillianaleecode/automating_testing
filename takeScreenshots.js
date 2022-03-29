@@ -9,19 +9,26 @@ var url = 'https://www.bild.de';
 describe('Taking Screenshots', () => {
     it('screenshot', async function() {
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             devtools: false,
             //slowMo: 50,
         })
         const page = await browser.newPage() 
 
-        await page.goto(url)
+        await page.goto(url, {
+            waitUntil: 'networkidle2' //networkidle2 works better than load, domcontentloaded or networkidle0
+          });
+
+        
+        
         
         await page.setViewport({ 
             width: 1600, 
             height: 2000, 
             //deviceScaleFactor: 1 
         });
+
+//remove the cmp layer
 
         try {
             var frames = await page.frames();
@@ -34,7 +41,7 @@ describe('Taking Screenshots', () => {
                     await cmpButton.click();
                 }
             // proof that we really clicked the right button
-            await page.screenshot({ path: 'cmpClicked.png' });
+            //await page.screenshot({ path: 'cmpClicked.png' });
         } catch (err) {
             console.log("error getting the cmp button")
             console.log(err);
@@ -68,6 +75,16 @@ describe('Taking Screenshots', () => {
 
          });
 
+         //partial desktop screenshot with coordinates
+         await page.screenshot({
+            path: `${path}/Partial Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+            'clip': {
+                'x': 40, 
+                'y': 21360, 
+                'width': 1200, 
+                'height': 560}
+        });   
+
          // Screenshot Emulate of an iPhone X
         await page.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1');
         await page.setViewport({ width: 375, height: 812 });
@@ -80,9 +97,14 @@ describe('Taking Screenshots', () => {
 
          });
 
-         //Screenshot of specific element
-         const selectors_desktop = ["#superbanner", "#mrec", "#billboard", "#sky"]
-         const selectors_mobile = ["#banner", "#mrec", "#inpage"]
+         
+  
+       
+
+        //Screenshot of specific element
+        // const selectors_desktop = ["#superbanner", "#mrec", "#billboard", "#sky"]
+        // const selectors_mobile = ["#banner", "#mrec", "#inpage"]
+
 
          //const select = await page.waitForSelector('#mrec_btf')
          //await page.setViewport({ width: 375, height: 812 });
@@ -106,15 +128,15 @@ describe('Taking Screenshots', () => {
         //  }
 
         //function for getting the element 
-        describe("taking screenshot single element",()=>{
-            it("element screenshot", async function(){
-                const select = await page.getAttribute("#mrec")
-                await select.screenshot({ 
-                    path: `${path}/Screenshot of an element ${" " + dateString + " " + Date.now()} .png`,
-                    type: "png",
-                 })
-            })
-        })
+        // describe("taking screenshot single element",()=>{
+        //     it("element screenshot", async function(){
+        //         const select = await page.getAttribute("#mrec")
+        //         await select.screenshot({ 
+        //             path: `${path}/Screenshot of an element ${" " + dateString + " " + Date.now()} .png`,
+        //             type: "png",
+        //          })
+        //     })
+        // })
          
 
 
@@ -143,17 +165,17 @@ describe('Taking Screenshots', () => {
         // }
 
         // get a list of all elements - same as document.querySelectorAll('*')
-        const elements = await page.$$('#mrec')
+        // const elements = await page.$$('#mrec')
 
-        for (let i = 0; i < elements.length; i++) {
-        try {
-            // get screenshot of a particular element
-            await elements[i].screenshot({path: `${i}.png`})
-        } catch(e) {
-            // if element is 'not visible', spit out error and continue
-            console.log(`couldnt take screenshot of element with index: ${i}. cause: `,  e)
-        }
-        }
+        // for (let i = 0; i < elements.length; i++) {
+        // try {
+        //     // get screenshot of a particular element
+        //     await elements[i].screenshot({path: `${i}.png`})
+        // } catch(e) {
+        //     // if element is 'not visible', spit out error and continue
+        //     console.log(`couldnt take screenshot of element with index: ${i}. cause: `,  e)
+        // }
+        // }
 
     
 

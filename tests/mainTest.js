@@ -9,7 +9,7 @@ var url = 'https://www.bild.de';
 describe('Puppeteer for AdTech', () => {
     it('lauching the browser', async function() {
         const browser = await puppeteer.launch({
-            headless: false, 
+            headless: true, 
             //slowMo: 50, 
             devtools: true
         })
