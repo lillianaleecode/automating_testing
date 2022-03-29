@@ -23,7 +23,24 @@ describe('Taking Screenshots', () => {
             //deviceScaleFactor: 1 
         });
 
-
+        try {
+            var frames = await page.frames();
+            var cmpFrame = frames.find(
+                f => f.url().indexOf("https://cmp2.bild.de/index.html") > -1); // return frame only if source matches
+                if (cmpFrame == undefined) {
+                    console.log("can't find cmp frame");
+                } else {
+                    const cmpButton = await cmpFrame.waitForSelector('button.message-component.message-button.no-children.focusable.sp_choice_type_11');
+                    await cmpButton.click();
+                }
+            // proof that we really clicked the right button
+            await page.screenshot({ path: 'cmpClicked.png' });
+        } catch (err) {
+            console.log("error getting the cmp button")
+            console.log(err);
+            process.exit();
+        }
+       
 
 //get the current timestamp, stringify it and use it as file name for the screenshot
 
