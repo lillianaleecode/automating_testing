@@ -63,6 +63,7 @@ describe('Taking Screenshots<3', () => {
             process.exit();
         }
        
+     
         
 
 //get the current timestamp, stringify it and use it as file name for the screenshot
@@ -88,29 +89,48 @@ describe('Taking Screenshots<3', () => {
 
         console.log(height)
 
-        const viewportHeight = 222
+        const viewportHeight = 200
 
-        const numberTimes = Math.floor(height/viewportHeight) 
+        const numberTimes = Math.floor(height/viewportHeight);
 
-        for (let i = 0; i < numberTimes; i++) {
+        // for (let i = 0; i < numberTimes; i++) {
 
+        //      // force lazy loading
+        //     await page.evaluate(() => window.scrollTo(0,i*200));
+
+        //     await page.screenshot({ 
+        //         //path: `screenshot${Date.now()}.png`,
+        //         path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+        //         type: "png",
+        //         timeout: 30000,
+    
+    
+        //      });
+            
+        // }
+        console.log(numberTimes);
+
+        (async () => {
+            for (let i = 0; i < numberTimes; i++) {
+
+                console.log("corrio el loop");
+              
              // force lazy loading
             await page.evaluate(() => window.scrollTo(0,i*200));
+
+            
 
             await page.screenshot({ 
                 //path: `screenshot${Date.now()}.png`,
                 path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
                 type: "png",
                 timeout: 30000,
+
+            });
     
     
-             });
-
-          
-
-           
-            
-        }
+            }
+        })();
 
 
 
