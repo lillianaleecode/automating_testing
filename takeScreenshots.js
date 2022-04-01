@@ -25,7 +25,7 @@ describe('Taking Screenshots<3', () => {
           });
 
         // force lazy loading
-        await page.evaluate(() => window.scrollTo(0, Number.MAX_SAFE_INTEGER));
+        // await page.evaluate(() => window.scrollTo(0, Number.MAX_SAFE_INTEGER));
 
         await page.waitFor(3000);
         
@@ -36,11 +36,11 @@ describe('Taking Screenshots<3', () => {
 
         await page.setDefaultTimeout(30000);
         
-        // await page.setViewport({ 
-        //     width: 1600, 
-        //     height: 2000, 
-        //     //deviceScaleFactor: 1 
-        // });
+        await page.setViewport({ 
+            width: 1600, 
+            height: 2000, 
+            //deviceScaleFactor: 1 
+        });
 
 
 //remove the cmp layer
@@ -86,9 +86,34 @@ describe('Taking Screenshots<3', () => {
 
         const height = await page.evaluate(() => document.documentElement.offsetHeight);
 
-
-        
         console.log(height)
+
+        const viewportHeight = 222
+
+        const numberTimes = Math.floor(height/viewportHeight) 
+
+        for (let i = 0; i < numberTimes; i++) {
+
+             // force lazy loading
+            await page.evaluate(() => window.scrollTo(0,i*200));
+
+            await page.screenshot({ 
+                //path: `screenshot${Date.now()}.png`,
+                path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+                type: "png",
+                timeout: 30000,
+    
+    
+             });
+
+          
+
+           
+            
+        }
+
+
+
 
         // await page.setViewport({ 
         //     width: 1600, 
@@ -97,16 +122,7 @@ describe('Taking Screenshots<3', () => {
         // });
 
          //Screenshop Desktop Size
-        await page.screenshot({ 
-            //path: `screenshot${Date.now()}.png`,
-            path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
-            type: "png",
-            fullPage: true,
-            timeout: 30000,
-
-
-         });
-         console.log("se cayo 1")
+        
 
          
 
