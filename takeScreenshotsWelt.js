@@ -19,7 +19,7 @@ describe('Taking Screenshots<3', () => {
         await page.setDefaultNavigationTimeout(30000);
 
         await page.goto(url, {
-            waitUntil: 'networkidle2', //Wait for all non-lazy loaded images to load. networkidle2 works better than load, domcontentloaded or networkidle0
+            //waitUntil: 'networkidle2', //Wait for all non-lazy loaded images to load. networkidle2 works better than load, domcontentloaded or networkidle0
             // Remove the timeout
              timeout: 0
           });
@@ -110,7 +110,7 @@ describe('Taking Screenshots<3', () => {
         // }
         console.log(numberTimes);
 
-        (async () => {
+        await (async () => {
             for (let i = 0; i < numberTimes; i++) {
 
                 console.log("corrio el loop");
