@@ -108,8 +108,41 @@ describe('Taking Screenshots<3', () => {
         //      });
             
         // }
+
+        //this code will scroll until the end of the page
+        async function autoScroll(page){
+            await page.evaluate(async () => {
+                await new Promise((resolve, reject) => {
+                    var totalHeight = 0;
+                    var distance = 100;
+                    var timer = setInterval(() => {
+                        var scrollHeight = document.body.scrollHeight;
+                        window.scrollBy(0, distance);
+                        totalHeight += distance;
+        
+                        if(totalHeight >= scrollHeight - window.innerHeight){
+                            clearInterval(timer);
+                            resolve();
+                        }
+                    }, 100);
+                });
+            });
+        }
+
+        await autoScroll(page);
+        await page.screenshot({ 
+            //path: `screenshot${Date.now()}.png`,
+            path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+            type: "png",
+            timeout: 30000,
+            fullPage: true,
+
+        });
+
+
         console.log(numberTimes);
 
+        //so far this loop takes screenshots from the first 200px high
         await (async () => {
             for (let i = 0; i < numberTimes; i++) {
 
@@ -118,7 +151,7 @@ describe('Taking Screenshots<3', () => {
              // force lazy loading
             await page.evaluate(() => window.scrollTo(0,i*200));
 
-            
+        
 
             await page.screenshot({ 
                 //path: `screenshot${Date.now()}.png`,
