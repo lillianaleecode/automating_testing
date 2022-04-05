@@ -2,7 +2,7 @@
 const fs = require('fs');
 const puppeteer = require('puppeteer')
 
-var url = 'https://www.bild.de';
+var url = 'https://www.welt.de';
 
 
 
@@ -19,7 +19,7 @@ describe('Taking Screenshots<3', () => {
         await page.setDefaultNavigationTimeout(30000);
 
         await page.goto(url, {
-            //waitUntil: 'networkidle2', //Wait for all non-lazy loaded images to load. networkidle2 works better than load, domcontentloaded or networkidle0
+            waitUntil: 'networkidle2', //Wait for all non-lazy loaded images to load. networkidle2 works better than load, domcontentloaded or networkidle0
             // Remove the timeout
              timeout: 0
           });
@@ -48,7 +48,7 @@ describe('Taking Screenshots<3', () => {
         try {
             var frames = await page.frames();
             var cmpFrame = frames.find(
-                f => f.url().indexOf("https://cmp2.bild.de/index.html") > -1); // return frame only if source matches
+                f => f.url().indexOf("https://cmp2.welt.de/index.html") > -1); // return frame only if source matches
                 if (cmpFrame == undefined) {
                     console.log("can't find cmp frame");
                 } else {
@@ -110,7 +110,7 @@ describe('Taking Screenshots<3', () => {
         // }
         console.log(numberTimes);
 
-        await (async () => {
+        (async () => {
             for (let i = 0; i < numberTimes; i++) {
 
                 console.log("corrio el loop");
