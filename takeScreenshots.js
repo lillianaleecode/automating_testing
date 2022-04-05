@@ -38,7 +38,7 @@ describe('Taking Screenshots<3', () => {
         
         await page.setViewport({ 
             width: 1600, 
-            height: 2000, 
+            height: 200, 
             //deviceScaleFactor: 1 
         });
 
@@ -119,6 +119,15 @@ describe('Taking Screenshots<3', () => {
                         var scrollHeight = document.body.scrollHeight;
                         window.scrollBy(0, distance);
                         totalHeight += distance;
+
+                            page.screenshot({ 
+                            path: `screenshot${Date.now()}.png`,
+                            // path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+                            type: "png",
+                            timeout: 30000,
+                            //fullPage: true,
+                
+                        });
         
                         if(totalHeight >= scrollHeight - window.innerHeight){
                             clearInterval(timer);
@@ -129,41 +138,69 @@ describe('Taking Screenshots<3', () => {
             });
         }
 
-        await autoScroll(page);
-        await page.screenshot({ 
-            //path: `screenshot${Date.now()}.png`,
-            path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
-            type: "png",
-            timeout: 30000,
-            fullPage: true,
+        async function autoScroll2(page, distance){
+            await page.evaluate(async (distance) => {
+                await new Promise((resolve, reject) => {
+                    window.scrollBy(0, distance);
+                    resolve()
+                });
+            },distance);
+        }
 
-        });
+        async function screenshot2(page){
+            for (let i = 0; i < 3; i++){
+                await autoScroll2(page, 200);
+                await page.screenshot({ 
+                    path: `screenshot${Date.now()}.png`,
+                    // path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+                    type: "png",
+                    timeout: 30000,
+                })
+
+            }
+        }
 
 
-        console.log(numberTimes);
+        console.log("hello 3");
+        await screenshot2(page);
 
-        //so far this loop takes screenshots from the first 200px high
-        await (async () => {
-            for (let i = 0; i < numberTimes; i++) {
 
-                console.log("corrio el loop");
+        // await autoScroll(page);
+
+        // await page.screenshot({ 
+        //     //path: `screenshot${Date.now()}.png`,
+        //     path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+        //     type: "png",
+        //     timeout: 30000,
+        //     fullPage: true,
+
+        // });
+
+
+        // console.log(numberTimes);
+
+        // //so far this loop takes screenshots from the first 200px high
+        // await (async () => {
+        //     for (let i = 0; i < numberTimes; i++) {
+
+        //         console.log("corrio el loop");
               
-             // force lazy loading
-            await page.evaluate(() => window.scrollTo(0,i*200));
+        //      // force lazy loading
+        //     await page.evaluate(() => window.scrollTo(0,i*200));
 
         
 
-            await page.screenshot({ 
-                //path: `screenshot${Date.now()}.png`,
-                path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
-                type: "png",
-                timeout: 30000,
+        //     await page.screenshot({ 
+        //         //path: `screenshot${Date.now()}.png`,
+        //         path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+        //         type: "png",
+        //         timeout: 30000,
 
-            });
+        //     });
     
     
-            }
-        })();
+        //     }
+        // })();
 
 
 
