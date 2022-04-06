@@ -38,7 +38,7 @@ describe('Taking Screenshots<3', () => {
         
         await page.setViewport({ 
             width: 1600, 
-            height: 200, 
+            height: 2000, 
             //deviceScaleFactor: 1 
         });
 
@@ -89,9 +89,10 @@ describe('Taking Screenshots<3', () => {
 
         console.log(height)
 
-        const viewportHeight = 200
+        const viewportHeight = 2000
 
         const numberTimes = Math.floor(height/viewportHeight);
+        console.log(numberTimes);
 
         // for (let i = 0; i < numberTimes; i++) {
 
@@ -109,7 +110,7 @@ describe('Taking Screenshots<3', () => {
             
         // }
 
-        //this code will scroll until the end of the page
+        //this code will scroll until the end of the page (full page)
         async function autoScroll(page){
             await page.evaluate(async () => {
                 await new Promise((resolve, reject) => {
@@ -119,15 +120,6 @@ describe('Taking Screenshots<3', () => {
                         var scrollHeight = document.body.scrollHeight;
                         window.scrollBy(0, distance);
                         totalHeight += distance;
-
-                            page.screenshot({ 
-                            path: `screenshot${Date.now()}.png`,
-                            // path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
-                            type: "png",
-                            timeout: 30000,
-                            //fullPage: true,
-                
-                        });
         
                         if(totalHeight >= scrollHeight - window.innerHeight){
                             clearInterval(timer);
@@ -137,7 +129,16 @@ describe('Taking Screenshots<3', () => {
                 });
             });
         }
+       // await autoScroll(page);
+//Screenshot by distance (full page)
+        // await page.screenshot({ 
+        //     //path: `screenshot${Date.now()}.png`,
+        //     path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+        //     type: "png",
+        //     fullPage: true,
+        //     timeout: 80000,})
 
+//scrolling function (for by distance partial)
         async function autoScroll2(page, distance){
             await page.evaluate(async (distance) => {
                 await new Promise((resolve, reject) => {
@@ -146,13 +147,13 @@ describe('Taking Screenshots<3', () => {
                 });
             },distance);
         }
-
+//screenshot by distance (partial)
         async function screenshot2(page){
-            for (let i = 0; i < 3; i++){
-                await autoScroll2(page, 200);
+            for (let i = 0; i < numberTimes; i++){
+                await autoScroll2(page, 2000);
                 await page.screenshot({ 
-                    path: `screenshot${Date.now()}.png`,
-                    // path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+                    //path: `screenshot${Date.now()}.png`,
+                    path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
                     type: "png",
                     timeout: 30000,
                 })
