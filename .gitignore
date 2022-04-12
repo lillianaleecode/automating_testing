@@ -2,3 +2,5 @@ node_modules/
 screenshots/
 *.png
 !spec/*.png
+!README.TXT
+!write.html
