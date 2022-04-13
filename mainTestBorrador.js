@@ -7,6 +7,8 @@ const fs = require('fs');
 var url = 'https://www.bild.de';
 
 const { buildPathHtml } = require('./buildPaths');
+const data = require('./data.json');
+const { timeStamp } = require('console');
 
 
 
@@ -33,18 +35,95 @@ describe('Puppeteer for AdTech', () => {
             
                 console.log("[Message from Adlib]: console." + msg._type + "(\"" + msg._text + "\")   from source: " + source);
 
-                
-                fs.createWriteStream("write.html").write(source, (err) => {
+               
+
+                /* console.log ("checkpoint 1")
+                fs.createWriteStream("write.html").write(html, (err) => {
                     if (err){
                         console.log(err.message);
                     }else{
                         console.log("data written");
                     }
-                })
+                }) */
+
+
+                const createRow = (item) => `
+                <tr>
+                    <td>${item.testName}</td>
+                    <td>${item.testId}</td>
+                    <td>${item.testDate}</td>
+                    <td>${item.testResult}</td>
+                    <td>${item.notes}</td>
+                    <td>${item.linkReference}</td>
+                </tr>
+                `;
+
+
+                const createTable = (rows) => `
+                <table>
+                <tr>
+                    <th>Test Name</td>
+                    <th>Test Id</td>
+                    <th>Test Date</td>
+                    <th>Test Result</td>
+                    <th>Notes</td>
+                    <th>Link Reference</td>
+
+                </tr>
+                ${rows}
+                </table>
+                `;
+
+                const createHtml = (table) => `
+                <html>
+                <head>
+                    <style>
+                    table {
+                        width: 100%;
+                    }
+                    tr {
+                        text-align: left;
+                        border: 1px solid black;
+                    }
+                    th, td {
+                        padding: 15px;
+                    }
+                    tr:nth-child(odd) {
+                        background: #CCC
+                    }
+                    tr:nth-child(even) {
+                        background: #FFF
+                    }
+                    .no-content {
+                        background-color: red;
+                    }
+                    </style>
+                </head>
+                <body>
+                    ${table}
+                    
+                </body>
+                </html>
+                `;
+
+                console.log ("checkpoint 2")
+
+                /* generate rows */
+                const rows = data.map(createRow).join('');
+                /* generate table */
+                const table = createTable(rows);
+                /* generate html */
+                const html = createHtml(table);
+                /* write the generated html to file */
+            
+                fs.writeFileSync(buildPathHtml, html);
+                console.log('Succesfully created an HTML table');
+
+
+
                 
 
-
-
+        
 
             }
 
@@ -54,9 +133,6 @@ describe('Puppeteer for AdTech', () => {
         
 
         
-
-
-
         await page.evaluate('console.log("message")')
 
 
