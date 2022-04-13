@@ -10,7 +10,7 @@ const { buildPathHtml } = require('./buildPaths');
 const data = require('./data.json');
 const { timeStamp } = require('console');
 
-
+var title = "";
 
 describe('Puppeteer for AdTech', () => {
     it('lauching the browser', async function() {
@@ -23,7 +23,8 @@ describe('Puppeteer for AdTech', () => {
 
      
         await page.goto(url)
-        const title = await page.title()
+        title = await page.title()
+        var contenidoTotal = [];
         const urlLink = await page.url()
         console.log('Title: ' + title)
         console.log('URL: ' + urlLink)
@@ -33,11 +34,7 @@ describe('Puppeteer for AdTech', () => {
         page.on('console', async function (msg) {
             const msgArgs = msg.args();
             var location = msg.location();
-            //console.log(document);
-            console.log("TITLE:" +title);
-           // const title_te3st = msg.document().title;
-
-          //  console.log("========="+"\n"+title_te3st);
+           
             var source = "unknown";
             if (typeof location == "object" && location.url != "") {
             source = location.url;
@@ -66,7 +63,7 @@ describe('Puppeteer for AdTech', () => {
                     }
                 }) */
 
-                const contenido = "<h1>Hello World</h1>";
+
 
 
                 const createRow = (item) => `
@@ -124,16 +121,15 @@ describe('Puppeteer for AdTech', () => {
                 </head>
                 <body>
                     ${table}
-                    ${contenido}
                     
                 </body>
                 </html>
                 `;
 
                 console.log ("checkpoint 2")
-
+                contenidoTotal.push(testCase)
                 /* generate rows */
-                const rows = [testCase].map(createRow).join('');
+                const rows = contenidoTotal.map(createRow).join('');
                 /* generate table */
                 const table = createTable(rows);
                 /* generate html */
@@ -144,7 +140,6 @@ describe('Puppeteer for AdTech', () => {
                 console.log('Succesfully created an HTML table');
 
 
-
                 
 
         
@@ -152,21 +147,12 @@ describe('Puppeteer for AdTech', () => {
             }
 
         
-          }.bind({title: title}));
+          }.bind({title: title, contenidoTotal: contenidoTotal}));
 
-        
 
         
         await page.evaluate('console.log("message")')
 
-
-         
-        /*const title = await page.title()
-        const urlLink = await page.url()
-
-        console.log('Title: ' + title)
-        console.log('URL: ' + urlLink)
- */
        
 
         
