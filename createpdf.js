@@ -106,16 +106,20 @@ describe('create PDF file', () => {
 
         await page.emulateMediaType('screen');
 
+        await page.waitForTimeout(1500); //helps to load left images to render
+
         await page.pdf({ 
             path: `${path}/PDF ${" " + dateString + " " + Date.now()} .pdf`,
             printBackground: true,
             scale: 0.5,
             format: "a6",
-            margin: {top:"50px"},
+            margin: {top:"50px", left:"50px", right:"50px"},
             landscape: false,
-            displayHeaderFooter: true,
+            displayHeaderFooter: true, //helps to load left images to render
 
         });
+
+        await page.waitForTimeout(250);
 
 
 
