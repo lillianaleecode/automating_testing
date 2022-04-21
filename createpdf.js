@@ -83,6 +83,27 @@ describe('create PDF file', () => {
         const numberTimes = Math.floor(height/viewportHeight);
         console.log(numberTimes);
 
+        //this code will scroll until the end of the page (full page)
+        async function autoScroll(page){
+            await page.evaluate(async () => {
+                await new Promise((resolve, reject) => {
+                    var totalHeight = 0;
+                    var distance = 500;
+                    var timer = setInterval(() => {
+                        var scrollHeight = document.body.scrollHeight;
+                        window.scrollBy(0, distance);
+                        totalHeight += distance;
+        
+                        if(totalHeight >= scrollHeight - window.innerHeight){
+                            clearInterval(timer);
+                            resolve();
+                        }
+                    }, 100);
+                });
+            });
+        }
+        await autoScroll(page);
+
         await page.pdf({ 
             //path: `screenshot${Date.now()}.png`,
             path: `${path}/PDF ${" " + dateString + " " + Date.now()} .pdf`,
