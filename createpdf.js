@@ -104,8 +104,9 @@ describe('create PDF file', () => {
         }
         await autoScroll(page);
 
+        await page.emulateMediaType('screen');
+
         await page.pdf({ 
-            //path: `screenshot${Date.now()}.png`,
             path: `${path}/PDF ${" " + dateString + " " + Date.now()} .pdf`,
             printBackground: true,
             scale: 0.5,
