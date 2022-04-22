@@ -7,10 +7,11 @@ const puppeteer = require('puppeteer')
 
 describe('create PDF protocol', () => {
     it('PDF<3', async function() {
+        const content = fs.readFileSync("./build.html", "utf8");
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
 
-        await page.setContent('hello world.');
+        await page.setContent(content);
 
         await page.emulateMediaType('screen');
 
