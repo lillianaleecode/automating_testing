@@ -16,7 +16,6 @@ describe('Puppeteer for AdTech', () => {
     it('lauching the browser', async function() {
         const browser = await puppeteer.launch({
             headless: true, 
-            //slowMo: 50, 
             devtools: true
         })
         const page = await browser.newPage() 
@@ -53,17 +52,6 @@ describe('Puppeteer for AdTech', () => {
                     "linkReference": source,
                 }
                 console.log(testCase);
-
-                /* console.log ("checkpoint 1")
-                fs.createWriteStream("write.html").write(html, (err) => {
-                    if (err){
-                        console.log(err.message);
-                    }else{
-                        console.log("data written");
-                    }
-                }) */
-
-
 
 
                 const createRow = (item) => `
