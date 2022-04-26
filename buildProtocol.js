@@ -60,7 +60,7 @@ describe('Create HTML Test Protocol ', () => {
               console.error(err)
               return
             }
-          }); 
+          });
 
         //scroll full page
         async function autoScroll(page){
