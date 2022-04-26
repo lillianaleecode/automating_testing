@@ -2,9 +2,7 @@
 const fs = require('fs');
 const puppeteer = require('puppeteer')
 
-//var url = 'https://www.bild.de';
 var url = 'https://www.bild.de/news/ausland/news-ausland/schweiz-iphone-rettet-abgestuerztem-snowboarder-das-leben-79683022.bild.html'
-
 
 
 describe('create PDF file', () => {
@@ -48,8 +46,7 @@ describe('create PDF file', () => {
                     const cmpButton = await cmpFrame.waitForSelector('button.message-component.message-button.no-children.focusable.sp_choice_type_11');
                     await cmpButton.click();
                 }
-            // proof that we really clicked the right button
-            //await page.screenshot({ path: 'cmpClicked.png' });
+            
         } catch (err) {
             console.log("error getting the cmp button")
             console.log(err);
@@ -59,7 +56,7 @@ describe('create PDF file', () => {
      
         
 
-//get the current timestamp, stringify it and use it as file name for the screenshot
+//get the current timestamp
 
         const currentDate = new Date();
 
@@ -86,7 +83,7 @@ describe('create PDF file', () => {
         const numberTimes = Math.floor(height/viewportHeight);
         console.log(numberTimes);
 
-        //this code will scroll until the end of the page (full page)
+        //scroll full page
         async function autoScroll(page){
             await page.evaluate(async () => {
                 await new Promise((resolve, reject) => {
@@ -111,7 +108,7 @@ describe('create PDF file', () => {
 
         
 
-        await page.waitForTimeout(1500); //helps to load left images to render
+        await page.waitForTimeout(1500);
 
         await page.pdf({ 
             path: `${path}/PDF ${" " + dateString + " " + Date.now()} .pdf`,
@@ -120,7 +117,7 @@ describe('create PDF file', () => {
             format: "a6",
             margin: {top:"50px", left:"50px", right:"50px"},
             landscape: false,
-            displayHeaderFooter: true, //helps to load left images to render
+            displayHeaderFooter: true, 
 
         });
 
