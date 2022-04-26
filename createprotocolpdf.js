@@ -3,6 +3,8 @@ const fs = require('fs-extra');
 const puppeteer = require('puppeteer')
 
 
+
+
 describe('create PDF protocol', () => {
     it('PDF<3', async function() {
         const content = fs.readFileSync("./build.html", "utf8");
@@ -10,18 +12,29 @@ describe('create PDF protocol', () => {
         const page = await browser.newPage();
 
         await page.setContent(content);
+
         await page.emulateMediaType('screen');
+
         console.log("process done");
 
-//get the current timestamp "day-month-2022"
+        
+
+       
+
+//get the current timestamp, stringify it and use it as file name for the screenshot
+
         const currentDate = new Date();
+
         const currentDayOfMonth = currentDate.getDate();
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
+
         const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear + " " + Date.now();
+        // "day-month-2022"
 
 //creating a folder
         const path = `tests/pdf/${dateString}`;
+
         fs.mkdirSync(path);
        
         await page.pdf({ 
@@ -31,7 +44,7 @@ describe('create PDF protocol', () => {
             format: "a6",
             margin: {top:"50px", left:"50px", right:"50px"},
             landscape: false,
-            displayHeaderFooter: true,
+            displayHeaderFooter: true, //helps to load left images to render
 
         });
 

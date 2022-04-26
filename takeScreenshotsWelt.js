@@ -11,6 +11,7 @@ describe('Taking Screenshots<3', () => {
         const browser = await puppeteer.launch({
             headless: false,
             devtools: false,
+            //slowMo: 50,
         })
         const page = await browser.newPage() 
 
@@ -18,18 +19,27 @@ describe('Taking Screenshots<3', () => {
         await page.setDefaultNavigationTimeout(30000);
 
         await page.goto(url, {
+            //waitUntil: 'networkidle2', //Wait for all non-lazy loaded images to load. networkidle2 works better than load, domcontentloaded or networkidle0
             // Remove the timeout
              timeout: 0
           });
 
+        // force lazy loading
+        // await page.evaluate(() => window.scrollTo(0, Number.MAX_SAFE_INTEGER));
 
         await page.waitFor(3000);
         
+        //
+        // await page
+        // .waitForSelector('#red-teaser-image')
+        // .then(() => console.log('got it'));
+
         await page.setDefaultTimeout(30000);
         
         await page.setViewport({ 
             width: 1600, 
             height: 2000, 
+            //deviceScaleFactor: 1 
         });
 
 
@@ -83,7 +93,21 @@ describe('Taking Screenshots<3', () => {
 
         const numberTimes = Math.floor(height/viewportHeight);
 
-      
+        // for (let i = 0; i < numberTimes; i++) {
+
+        //      // force lazy loading
+        //     await page.evaluate(() => window.scrollTo(0,i*200));
+
+        //     await page.screenshot({ 
+        //         //path: `screenshot${Date.now()}.png`,
+        //         path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+        //         type: "png",
+        //         timeout: 30000,
+    
+    
+        //      });
+            
+        // }
         console.log(numberTimes);
 
         await (async () => {
@@ -110,6 +134,59 @@ describe('Taking Screenshots<3', () => {
 
 
 
+
+        // await page.setViewport({ 
+        //     width: 1600, 
+        //     height: height, 
+        //     //deviceScaleFactor: 1 
+        // });
+
+         //Screenshop Desktop Size
+        
+
+         
+
+
+        // //Screenshop Desktop Size
+        // await page.screenshot({ 
+        //     //path: `screenshot${Date.now()}.png`,
+        //     path: `${path}/Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+        //     type: "png",
+        //     fullPage: true,
+        //     timeout: 80000,
+
+        //  });
+        //  console.log("se cayo 1")
+
+        //  //partial desktop screenshot with coordinates
+        //  await page.screenshot({
+        //     path: `${path}/Partial Screenshot from desktop ${" " + dateString + " " + Date.now()} .png`,
+        //     'clip': {
+        //         'x': 600, 
+        //         'y': 0, 
+        //         'width': 650, 
+        //         'height': 650}
+        // });   
+        // console.log("se cayo 2")
+
+        //  // Screenshot Emulate of an iPhone X
+        // await page.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1');
+        // await page.setViewport({ width: 375, height: 812 });
+        // await page.goto(url);
+
+        // console.log("se cayo 2.5")
+
+        // await page.screenshot({ 
+        //     path: `${path}/Screenshot from mobile ${" " + dateString + " " + Date.now()} .png`,
+        //     type: "png",
+        //     fullPage: true,
+        //     timeout: 80000,
+
+        //  });
+
+        //  console.log("se cayo 3")
+
+         
          
   
         

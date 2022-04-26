@@ -10,23 +10,36 @@ describe('Puppeteer for AdTech', () => {
     it('lauching the browser', async function() {
         const browser = await puppeteer.launch({
             headless: true, 
+            //slowMo: 50, 
             devtools: true
         })
         const page = await browser.newPage() 
 
+// EventListener for console messages - this code runs every time a console message is written
         page.on('console', async (msg) => {
             const msgArgs = msg.args();
             var location = msg.location();
 
+            // for (let i = 0; i < msgArgs.length; ++i) {
+            //   console.log(await msgArgs[i].jsonValue());
+            // } 
+            //console.log(msgArgs);
+            //console.log(msg.type());
+            //console.log(msg.text());
+            //console.log(msg.args());
 
             // Find source from which the message is fired
             var source = "unknown";
             if (typeof location == "object" && location.url != "") {
             source = location.url;
             }
+            // give out every console message
+            //console.log("console." + msg._type + "(" + msg._text + ") from source: " + source);
 
             // filter console messages for source
             if (source.includes("www.asadcdn.com")) {
+                //console.log("msg.location(): ", msg.location());
+                //console.log("msg.stackTrace(): ", msg.stackTrace());
                 console.log("[Message from Adlib]: console." + msg._type + "(\"" + msg._text + "\")   from source: " + source);
             }
 
@@ -43,7 +56,13 @@ describe('Puppeteer for AdTech', () => {
         console.log('Title: ' + title)
         console.log('URL: ' + urlLink)
 
-       
+        ////
+
+        // const ads = await page.evaluate("adSSetup"); //retrieves the adSetup
+        // console.log(ads);
+
+        ////
+
 
         
     })
