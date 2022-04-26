@@ -9,6 +9,8 @@ var url = 'https://www.bild.de/news/ausland/news-ausland/schweiz-iphone-rettet-a
 describe('Create HTML Test Protocol ', () => {
     it('HTML File Creation', async function() {
 
+        
+
         const browser = await puppeteer.launch({
             headless: true,
             devtools: false,
@@ -46,21 +48,28 @@ describe('Create HTML Test Protocol ', () => {
             console.log("error getting the cmp button")
             console.log(err);
             process.exit();
-        }      
+        }     
+
+//Append Title
+        const title = await page.title()
+        const urlLink = await page.url()
+
+        console.log('Title: ' + title)
+        console.log('URL: ' + urlLink)
+
+        var addTitle = "<h1>" + "Test Protocol" + "</h1>" + "<br>" + "<h2>" + title + "</h2>" + "<br>"  ;
+        fs.appendFile('buildProtocol.html', addTitle, err => {if (err) {console.error(err)}});
 
 //get the current timestamp, "day-month-2022"
         const currentDate = new Date();
         const currentDayOfMonth = currentDate.getDate();
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
-        const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear + " " + Date.now();
+        const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear ;
 
-        fs.appendFile('buildProtocol.html', dateString, err => {
-            if (err) {
-              console.error(err)
-              return
-            }
-          });
+        var addDate = "<h2>" + dateString + "</h2>" + "<br>";
+
+        fs.appendFile('buildProtocol.html', addDate, err => {if (err) {console.error(err)}});
 
         //scroll full page
         async function autoScroll(page){
@@ -145,11 +154,7 @@ describe('Create HTML Test Protocol ', () => {
         // await screenshot2(page);
 
 
-        const title = await page.title()
-        const urlLink = await page.url()
-
-        console.log('Title: ' + title)
-        console.log('URL: ' + urlLink)
+        
 
 
 
