@@ -53,6 +53,13 @@ describe('Create HTML Test Protocol ', () => {
 
 //create html file        
         GenerateHtmlProtocol();
+//Append opening HTML
+
+        var addHtmlOpening = '<!DOCTYPE html>' + '<html lang="en">'+
+        '<head>' + '<title>Test Protocol</title>'+'</head>' +
+        '<body>';
+        fs.appendFile('buildProtocol.html', addHtmlOpening, err => {if (err) {console.error(err)}});
+
 
 //Append Title
         const title = await page.title()
@@ -61,17 +68,20 @@ describe('Create HTML Test Protocol ', () => {
         console.log('Title: ' + title)
         console.log('URL: ' + urlLink)
 
-        var addTitle = "<h1>" + "Test Protocol" + "</h1>" + "<br>" + "<h2>" + title + "</h2>" + "<br>"  ;
+        var addSource = "<h3>" + "testing source:" + "</h3>" + " " + "<p>" + url + "</p>"
+
+        var addTitle = "<h1>" + "Test Protocol" + "</h1>" + "<br>" + "<h2>" + title + " - " + "</h2>" + addSource + "<br>"  ;
         fs.appendFile('buildProtocol.html', addTitle, err => {if (err) {console.error(err)}});
 
 //get the current timestamp, "day-month-2022"
         const currentDate = new Date();
+        const currentTime = currentDate.getHours() + ':' + currentDate.getMinutes();
         const currentDayOfMonth = currentDate.getDate();
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
         const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear ;
 
-        var addDate = "<h2>" + dateString + "</h2>" + "<br>";
+        var addDate = "<p>" + "Date: " + dateString + " - " + currentTime + "</p>" +"<br>";
 
         fs.appendFile('buildProtocol.html', addDate, err => {if (err) {console.error(err)}});
 
@@ -97,6 +107,10 @@ describe('Create HTML Test Protocol ', () => {
 
 //Append Adlib Version 
          GetVersion().toString();
+
+//Append closing HTML
+        var addHtmlClosing = '</body>'+ '</html>';
+        fs.appendFile('buildProtocol.html', addHtmlClosing, err => {if (err) {console.error(err)}});
     
 
 // scroll to end of page to load all sightloader slots
@@ -122,7 +136,6 @@ describe('Create HTML Test Protocol ', () => {
 
                 adSlotBuild = adSlots[i] + " ";
 
-                console.log("a")
                 fs.appendFile('buildProtocol.html', adSlotBuild, err => {
                     if (err) {
                       console.error(err)
@@ -130,36 +143,12 @@ describe('Create HTML Test Protocol ', () => {
                     }
                     //done!
                   });
-                console.log("b")
-
             } else {
                 console.log("no slot for " + adSlots[i] + " found");
             }
         }
 
-
-        async function ScrollAdslotIntoView(page, _adSlot) {
-            console.log("ScrollAdslotIntoView(" + _adSlot + ") was called");
-            await page.evaluate(async (_adSlot) => {
-                return await new Promise(resolve => {
-                    setTimeout(() => {
-                        console.log("looking for adslot " + _adSlot);
-                        var slot = document.getElementById(_adSlot);
-                        if (slot != null) {
-                            slot.scrollIntoView();
-                            return resolve({"found": true});
-                        } else {
-                            console.log(_adSlot + " not found");
-                            return resolve({"found": false});
-                        }
-                    }, 1000)
-                })
-            }, _adSlot);
-        }
-
-
-        console.log("hello 3");
-       
+        ScrollAdslotIntoView();
 
     })
 })
@@ -184,13 +173,30 @@ async function GetVersion() {
         if (msg._text.includes("alpha loaded")) {
             // console.log("msg from function GetVersion()1: Lilly check: "  + msg._text.slice(0,15))
             const addVersion = msg._text.slice(6,15);
-            const addVersionConcat = "<h3>" + "Testing with Adlib version" + addVersion + "(development)" + "</h3>" + "<br>"
+            const addVersionConcat = "<h3>" + "Testing with Adlib version" + addVersion + " (development)" + "</h3>" + "<br>"
             // console.log( "msg from function GetVersion()2:" + addVersionConcat );
             fs.appendFile('buildProtocol.html', addVersionConcat, err => {if (err) {console.error(err)}})
         };
-    });
-    
+    });   
     await page.goto(url);
-
 }
 
+
+async function ScrollAdslotIntoView(page, _adSlot) {
+    console.log("ScrollAdslotIntoView(" + _adSlot + ") was called");
+    await page.evaluate(async (_adSlot) => {
+        return await new Promise(resolve => {
+            setTimeout(() => {
+                console.log("looking for adslot " + _adSlot);
+                var slot = document.getElementById(_adSlot);
+                if (slot != null) {
+                    slot.scrollIntoView();
+                    return resolve({"found": true});
+                } else {
+                    console.log(_adSlot + " not found");
+                    return resolve({"found": false});
+                }
+            }, 1000)
+        })
+    }, _adSlot);
+}
