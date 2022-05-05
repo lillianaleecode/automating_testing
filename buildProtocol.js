@@ -106,18 +106,9 @@ describe('Create HTML Test Protocol ', () => {
         }
 
 //Append Adlib Version 
-        GetVersion().toString();
+        await GetVersion().toString();
 
-//Append Check AdSlots (Desktop)
-        await page.setViewport({ 
-            //setting Desktop size
-            width: 1920, 
-            height: 1800, 
 
-        });
-        var addSlotsDesktop = "<h2>" + "Check AdSlots (Desktop)" + "</h2>"+ "<br>"
-        var addSlotsDesktopFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<br>" + "<p>"+  + "</p>"
-        fs.appendFile('buildProtocol.html', addSlotsDesktop + addSlotsDesktopFound, err => {if (err) {console.error(err)}});    
 
 // scroll to end of page to load all sightloader slots
         await autoScroll(page);
@@ -125,6 +116,10 @@ describe('Create HTML Test Protocol ', () => {
         adSlots = adSSetup["adPlacements"];
 
         console.log("adSlots = ", adSlots)
+
+        var addSlotsDesktop = "<h2>" + "Check AdSlots (Desktop)" + "</h2>"+ "<br>"
+        var addSlotsDesktopFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<br>"
+        fs.appendFile('buildProtocol.html', addSlotsDesktop + addSlotsDesktopFound, err => {if (err) {console.error(err)}}); 
 
         for (var i = 0; i < adSlots.length; i++) {
             console.log("current slot ", adSlots[i])
@@ -137,18 +132,21 @@ describe('Create HTML Test Protocol ', () => {
 
             console.log("selector found ", slotFound)
             // if slot exists - append to build.html
+             
+
             if (slotFound) {
                 await ScrollAdslotIntoView(page, adSlots[i]);
 
                 adSlotBuild = adSlots[i] + " ";
 
-                fs.appendFile('buildProtocol.html', adSlotBuild, err => {
-                    if (err) {
-                      console.error(err)
-                      return
-                    }
-                    //done!
-                  });
+                //Append Check AdSlots (Desktop)
+            await page.setViewport({ 
+            //setting Desktop size
+            width: 1920, 
+            height: 1800, 
+            });
+            
+            fs.appendFile('buildProtocol.html',  adSlotBuild, err => {if (err) {console.error(err)}});    
             } else {
                 console.log("no slot for " + adSlots[i] + " found");
             }
