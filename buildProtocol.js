@@ -106,12 +106,18 @@ describe('Create HTML Test Protocol ', () => {
         }
 
 //Append Adlib Version 
-         GetVersion().toString();
+        GetVersion().toString();
 
-//Append closing HTML
-        var addHtmlClosing = '</body>'+ '</html>';
-        fs.appendFile('buildProtocol.html', addHtmlClosing, err => {if (err) {console.error(err)}});
-    
+//Append Check AdSlots (Desktop)
+        await page.setViewport({ 
+            //setting Desktop size
+            width: 1920, 
+            height: 1800, 
+
+        });
+        var addSlotsDesktop = "<h2>" + "Check AdSlots (Desktop)" + "</h2>"+ "<br>"
+        var addSlotsDesktopFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<br>" + "<p>"+  + "</p>"
+        fs.appendFile('buildProtocol.html', addSlotsDesktop + addSlotsDesktopFound, err => {if (err) {console.error(err)}});    
 
 // scroll to end of page to load all sightloader slots
         await autoScroll(page);
