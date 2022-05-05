@@ -96,12 +96,8 @@ describe('Create HTML Test Protocol ', () => {
         }
 
 //Append Adlib Version 
-//this code doesnt work as it is returning "[object Promise]"", because here  puppeteer console is not binded with my local console, so no results. To solve this, I append directly from the puppeteer function GetVersion().
-        var vString  = GetVersion().toString();
-        var fString = "<h3>" + "AdLib version:" + vString + "<h3>"  + "<br>"  ;
-        
-        console.log("AdLib Version = " + fString);
-        fs.appendFile('buildProtocol.html', fString, err => {if (err) {console.error(err)}});
+         GetVersion().toString();
+    
 
 // scroll to end of page to load all sightloader slots
         await autoScroll(page);
@@ -186,11 +182,11 @@ async function GetVersion() {
     page.on('console', async (msg) => {
         
         if (msg._text.includes("alpha loaded")) {
-            console.log("msg from function GetVersion()1: Lilly check: "  + msg._text.slice(0,15))
+            // console.log("msg from function GetVersion()1: Lilly check: "  + msg._text.slice(0,15))
             const addVersion = msg._text.slice(6,15);
             const addVersionConcat = "<h3>" + "Testing with Adlib version" + addVersion + "(development)" + "</h3>" + "<br>"
-            console.log( "msg from function GetVersion()2:" + addVersionConcat );
-            fs.appendFile('buildProtocol.html', addVersionConcat+ "sent directly from the puppeteer function", err => {if (err) {console.error(err)}})
+            // console.log( "msg from function GetVersion()2:" + addVersionConcat );
+            fs.appendFile('buildProtocol.html', addVersionConcat, err => {if (err) {console.error(err)}})
         };
     });
     
