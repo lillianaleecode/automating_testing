@@ -33,13 +33,13 @@ describe('Puppeteer for AdTech', () => {
             
         
           });
-        await page.evaluate('console.log("message")')
+        // await page.evaluate('console.log("message")')
 
         await page.goto(url)
-        const title = await page.title()
-        const urlLink = await page.url()
-        console.log('Title: ' + title)
-        console.log('URL: ' + urlLink)
+        // const title = await page.title()
+        // const urlLink = await page.url()
+        // console.log('Title: ' + title)
+        // console.log('URL: ' + urlLink)
       
 
         
