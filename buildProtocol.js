@@ -6,6 +6,7 @@ var url = 'https://www.bild.de/news/ausland/news-ausland/schweiz-iphone-rettet-a
 
 
 
+
 describe('Create HTML Test Protocol ', () => {
     it('HTML File Creation', async function() {
 
@@ -48,7 +49,10 @@ describe('Create HTML Test Protocol ', () => {
             console.log("error getting the cmp button")
             console.log(err);
             process.exit();
-        }     
+        }  
+
+//create html file        
+        GenerateHtmlProtocol();
 
 //Append Title
         const title = await page.title()
@@ -164,3 +168,9 @@ describe('Create HTML Test Protocol ', () => {
 })
 
 //to run this terminal: npm run test takeScreenshots.js
+
+function GenerateHtmlProtocol() {
+    var fileName = 'buildProtocol.html';
+    fs.createWriteStream(fileName);
+
+    };
