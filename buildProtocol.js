@@ -85,7 +85,19 @@ describe('Create HTML Test Protocol ', () => {
 
       
 //Append Adlib Version 
-        await GetVersion().toString();
+        page.on('console', async (msg) => {
+            
+            if (msg._text.includes("alpha loaded")) {
+                // console.log("msg from function GetVersion()1: Lilly check: "  + msg._text.slice(0,15))
+                const addVersion = msg._text.slice(7,15);
+                const addVersionConcat = "<h3>" + "Testing with Adlib version" + addVersion + " (development)" + "</h3>" + "<br>"
+                // console.log( "msg from function GetVersion()2:" + addVersionConcat );
+                fs.appendFileSync('buildProtocol.html', addVersionConcat, err => {if (err) {console.error(err)}})
+            };
+        });   
+        await page.goto(url);
+
+   
 
 // load all sightloader slots
       
@@ -206,26 +218,7 @@ function GenerateHtmlProtocol() {
 
     };
 
-//puppeteer function to get Adlib Version
-async function GetVersion() {
-    const puppeteer = require('puppeteer');
-    const fs = require('fs');
-    const browser = await puppeteer.launch({
-        headless: true, 
-    })
-    const page = await browser.newPage() 
-    page.on('console', async (msg) => {
-        
-        if (msg._text.includes("alpha loaded")) {
-            // console.log("msg from function GetVersion()1: Lilly check: "  + msg._text.slice(0,15))
-            const addVersion = msg._text.slice(6,15);
-            const addVersionConcat = "<h3>" + "Testing with Adlib version" + addVersion + " (development)" + "</h3>" + "<br>"
-            // console.log( "msg from function GetVersion()2:" + addVersionConcat );
-            fs.appendFileSync('buildProtocol.html', addVersionConcat, err => {if (err) {console.error(err)}})
-        };
-    });   
-    await page.goto(url);
-}
+
 
 async function ScrollAdslotIntoView(page, _adSlot) {
     console.log("ScrollAdslotIntoView(" + _adSlot + ") was called");
