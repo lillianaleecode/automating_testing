@@ -54,7 +54,7 @@ describe('Create HTML Test Protocol ', () => {
 
 //Append opening HTML
         var addHtmlOpening = '<!DOCTYPE html>' + '<html lang="en">'+
-        '<head>' + '<title>Test Protocol</title>'+'</head>' +
+        '<head>' + '<title>Test Protocol</title> <link rel="stylesheet" href="style.css">'+'</head>' +
         '<body>';
         fs.appendFile('buildProtocol.html', addHtmlOpening, err => {if (err) {console.error(err)}});
 
@@ -68,7 +68,7 @@ describe('Create HTML Test Protocol ', () => {
 
         var addSource = "<h3>" + "testing source:" + "</h3>" + " " + "<p>" + url + "</p>"
 
-        var addTitle = "<h1>" + "Test Protocol" + "</h1>" + "<br>" + "<h2>" + title + " - " + "</h2>" + addSource + "<br>"  ;
+        var addTitle = "<h1>" + "Test Protocol" + "</h1>" + "<h2>" + title + " - " + "</h2>" + addSource   ;
         fs.appendFileSync('buildProtocol.html', addTitle, err => {if (err) {console.error(err)}});
 
 //get the current timestamp, "day-month-2022"
@@ -79,7 +79,7 @@ describe('Create HTML Test Protocol ', () => {
         const currentYear = currentDate.getFullYear();
         const dateString = " " + currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear ;
 
-        var addDate = "<p>" + "Date: " + dateString + " - " + currentTime + "</p>" +"<br>";
+        var addDate = "<p>" + "Date: " + dateString + " - " + currentTime + "</p>";
 
         fs.appendFileSync('buildProtocol.html', addDate, err => {if (err) {console.error(err)}});
 
@@ -90,7 +90,7 @@ describe('Create HTML Test Protocol ', () => {
             if (msg._text.includes("alpha loaded")) {
                 // console.log("msg from function GetVersion()1: Lilly check: "  + msg._text.slice(0,15))
                 const addVersion = msg._text.slice(7,15);
-                const addVersionConcat = "<h3>" + "Testing with Adlib version" + addVersion + " (development)" + "</h3>" + "<br>"
+                const addVersionConcat = "<h3>" + "Testing with Adlib version" + addVersion + " (development)" + "</h3>" 
                 // console.log( "msg from function GetVersion()2:" + addVersionConcat );
                 fs.appendFileSync('buildProtocol.html', addVersionConcat, err => {if (err) {console.error(err)}})
             };
@@ -112,8 +112,8 @@ describe('Create HTML Test Protocol ', () => {
             height: 1800, 
             });
 
-        var addSlotsDesktop = "<h2>" + "Check AdSlots (Desktop)" + "</h2>"+ "<br>"
-        var addSlotsDesktopFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<br>" + "<ul>"
+        var addSlotsDesktop = "<h2>" + "Check AdSlots (Desktop)" + "</h2>"
+        var addSlotsDesktopFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<ul>"
         fs.appendFileSync('buildProtocol.html', addSlotsDesktop + addSlotsDesktopFound, err => {if (err) {console.error(err)}}); 
         
         for (var i = 0; i < adSlots.length; i++) {
@@ -137,7 +137,7 @@ describe('Create HTML Test Protocol ', () => {
 
         
 //1b. AdSlots NOT found in adSSetup  DESKTOP
-        var addSlotsDesktopNotFound = "<h3>" + "AdSlots missing on the page:" + "<h/3>" + "<br>" + "<ul>"
+        var addSlotsDesktopNotFound = "<h3>" + "AdSlots missing on the page:" + "<h/3>" + "<ul>"
         fs.appendFileSync('buildProtocol.html', addSlotsDesktopNotFound, err => {if (err) {console.error(err)}}); 
 
         for (var i = 0; i < adSlots.length; i++) {
@@ -161,8 +161,8 @@ describe('Create HTML Test Protocol ', () => {
             
         await page.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1');
 
-        var addSlotsMobile = "<h2>" + "Check AdSlots (Mobile)" + "</h2>"+ "<br>"
-        var addSlotsMobileFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<br>" + "<ul>"
+        var addSlotsMobile = "<h2>" + "Check AdSlots (Mobile)" + "</h2>"
+        var addSlotsMobileFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<ul>"
         fs.appendFileSync('buildProtocol.html', addSlotsMobile + addSlotsMobileFound, err => {if (err) {console.error(err)}}); 
         
         for (var i = 0; i < adSlots.length; i++) {
@@ -186,7 +186,7 @@ describe('Create HTML Test Protocol ', () => {
 
         
 //2b. AdSlots NOT found in adSSetup  Mobile
-        var addSlotsMobileNotFound = "<h3>" + "AdSlots missing on the page:" + "<h/3>" + "<br>" + "<ul>"
+        var addSlotsMobileNotFound = "<h3>" + "AdSlots missing on the page:" + "<h/3>"+ "<ul>"
         fs.appendFileSync('buildProtocol.html', addSlotsMobileNotFound, err => {if (err) {console.error(err)}}); 
 
         for (var i = 0; i < adSlots.length; i++) {
@@ -203,7 +203,7 @@ describe('Create HTML Test Protocol ', () => {
         fs.appendFileSync('buildProtocol.html', "</ul>", err => {if (err) {console.error(err)}}); 
 
 //3. CHECK FOR CONSOLE ERRORS
-        fs.appendFileSync('buildProtocol.html',"<h2> Check for console errors: </h2> <br> <h3> Errors from Adlib (1): <h/3> <br> ", err => {if (err) {console.error(err)}}); 
+        fs.appendFileSync('buildProtocol.html',"<h2> Check for console errors: </h2>  <h3> Errors from Adlib (1): <h/3> ", err => {if (err) {console.error(err)}}); 
 
     })
 })
