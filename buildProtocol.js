@@ -121,7 +121,7 @@ describe('Create HTML Test Protocol ', () => {
                 fs.appendFileSync('buildProtocol.html',  "<li>" + adSlotBuild + "</li>", err => {if (err) {console.error(err)}});    
             } 
         }
-        fs.appendFileSync('buildProtocol.html', "<ul>", err => {if (err) {console.error(err)}}); 
+        fs.appendFileSync('buildProtocol.html', "</ul>", err => {if (err) {console.error(err)}}); 
 
         
 //1b. AdSlots NOT found in adSSetup  DESKTOP
@@ -139,13 +139,15 @@ describe('Create HTML Test Protocol ', () => {
             fs.appendFileSync('buildProtocol.html', "<li>" + adSlots[i] + "</li>" , err => {if (err) {console.error(err)}});    
             } 
         }
-        fs.appendFileSync('buildProtocol.html', "<ul>", err => {if (err) {console.error(err)}}); 
+        fs.appendFileSync('buildProtocol.html', "</ul>", err => {if (err) {console.error(err)}}); 
 //2a. AdSlots found in adSSetup Mobile
         await page.setViewport({ 
             //Desktop size
             width: 414, 
             height: 896, 
             });
+            
+        await page.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1');
 
         var addSlotsMobile = "<h2>" + "Check AdSlots (Mobile)" + "</h2>"+ "<br>"
         var addSlotsMobileFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<br>" + "<ul>"
@@ -168,7 +170,7 @@ describe('Create HTML Test Protocol ', () => {
                 fs.appendFileSync('buildProtocol.html', "<li>" + adSlotBuild + "</li>" , err => {if (err) {console.error(err)}});    
             } 
         }
-        fs.appendFileSync('buildProtocol.html', "<ul>", err => {if (err) {console.error(err)}}); 
+        fs.appendFileSync('buildProtocol.html', "</ul>", err => {if (err) {console.error(err)}}); 
 
         
 //2b. AdSlots NOT found in adSSetup  Mobile
@@ -186,10 +188,15 @@ describe('Create HTML Test Protocol ', () => {
             fs.appendFileSync('buildProtocol.html', "<li>" + adSlots[i] + "</li>", err => {if (err) {console.error(err)}});    
             } 
         }
-        fs.appendFileSync('buildProtocol.html', "<ul>", err => {if (err) {console.error(err)}}); 
+        fs.appendFileSync('buildProtocol.html', "</ul>", err => {if (err) {console.error(err)}}); 
+
+//3. CHECK FOR CONSOLE ERRORS
+        fs.appendFileSync('buildProtocol.html',"<h2> Check for console errors: </h2> <br> <h3> Errors from Adlib (1): <h/3> <br> ", err => {if (err) {console.error(err)}}); 
 
     })
 })
+
+
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
