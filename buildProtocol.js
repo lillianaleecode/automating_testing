@@ -2,15 +2,13 @@
 const fs = require('fs');
 const puppeteer = require('puppeteer')
 
-var url = 'https://www.bild.de/news/ausland/news-ausland/schweiz-iphone-rettet-abgestuerztem-snowboarder-das-leben-79683022.bild.html'
+var url = 'https://m.bild.de/sport/mehr-sport/boxen/heute-bei-bild-im-tv-ab-22-uhr-die-grosse-doku-ueber-felix-sturm-79503584.bildMobile.html###wt_ref=https%3A%2F%2Fwww.bild.de%2Fvideo%2Fmediathek%2Fvideo%2Fbild-live-71144736.bild.html&wt_t=1652095830144'
 
 
 
 
 describe('Create HTML Test Protocol ', () => {
     it('HTML File Creation', async function() {
-
-        
 
         const browser = await puppeteer.launch({
             headless: true,
@@ -53,8 +51,8 @@ describe('Create HTML Test Protocol ', () => {
 
 //create html file        
         GenerateHtmlProtocol();
-//Append opening HTML
 
+//Append opening HTML
         var addHtmlOpening = '<!DOCTYPE html>' + '<html lang="en">'+
         '<head>' + '<title>Test Protocol</title>'+'</head>' +
         '<body>';
@@ -71,7 +69,7 @@ describe('Create HTML Test Protocol ', () => {
         var addSource = "<h3>" + "testing source:" + "</h3>" + " " + "<p>" + url + "</p>"
 
         var addTitle = "<h1>" + "Test Protocol" + "</h1>" + "<br>" + "<h2>" + title + " - " + "</h2>" + addSource + "<br>"  ;
-        fs.appendFile('buildProtocol.html', addTitle, err => {if (err) {console.error(err)}});
+        fs.appendFileSync('buildProtocol.html', addTitle, err => {if (err) {console.error(err)}});
 
 //get the current timestamp, "day-month-2022"
         const currentDate = new Date();
@@ -83,44 +81,29 @@ describe('Create HTML Test Protocol ', () => {
 
         var addDate = "<p>" + "Date: " + dateString + " - " + currentTime + "</p>" +"<br>";
 
-        fs.appendFile('buildProtocol.html', addDate, err => {if (err) {console.error(err)}});
+        fs.appendFileSync('buildProtocol.html', addDate, err => {if (err) {console.error(err)}});
 
-        //scroll full page
-        async function autoScroll(page){
-            await page.evaluate(async () => {
-                await new Promise((resolve, reject) => {
-                    var totalHeight = 0;
-                    var distance = 500;
-                    var timer = setInterval(() => {
-                        var scrollHeight = document.body.scrollHeight;
-                        window.scrollBy(0, distance);
-                        totalHeight += distance;
-
-                        if(totalHeight >= scrollHeight - window.innerHeight){
-                            clearInterval(timer);
-                            resolve();
-                        }
-                    }, 100);
-                });
-            });
-        }
-
+      
 //Append Adlib Version 
         await GetVersion().toString();
 
-
-
-// scroll to end of page to load all sightloader slots
-        await autoScroll(page);
+// load all sightloader slots
+      
         adSSetup = await page.evaluate("adSSetup");
         adSlots = adSSetup["adPlacements"];
+        console.log("adSlots array = ", adSlots)
 
-        console.log("adSlots = ", adSlots)
+//1a. AdSlots found in adSSetup DESKTOP
+        await page.setViewport({ 
+            //Desktop size
+            width: 1920, 
+            height: 1800, 
+            });
 
         var addSlotsDesktop = "<h2>" + "Check AdSlots (Desktop)" + "</h2>"+ "<br>"
-        var addSlotsDesktopFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<br>"
-        fs.appendFile('buildProtocol.html', addSlotsDesktop + addSlotsDesktopFound, err => {if (err) {console.error(err)}}); 
-
+        var addSlotsDesktopFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<br>" + "<ul>"
+        fs.appendFileSync('buildProtocol.html', addSlotsDesktop + addSlotsDesktopFound, err => {if (err) {console.error(err)}}); 
+        
         for (var i = 0; i < adSlots.length; i++) {
             console.log("current slot ", adSlots[i])
             // check if slot exists
@@ -132,30 +115,82 @@ describe('Create HTML Test Protocol ', () => {
 
             console.log("selector found ", slotFound)
             // if slot exists - append to build.html
-             
-
             if (slotFound) {
                 await ScrollAdslotIntoView(page, adSlots[i]);
-
                 adSlotBuild = adSlots[i] + " ";
-
-                //Append Check AdSlots (Desktop)
-            await page.setViewport({ 
-            //setting Desktop size
-            width: 1920, 
-            height: 1800, 
-            });
-            
-            fs.appendFile('buildProtocol.html',  adSlotBuild, err => {if (err) {console.error(err)}});    
-            } else {
-                console.log("no slot for " + adSlots[i] + " found");
-            }
+                fs.appendFileSync('buildProtocol.html',  "<li>" + adSlotBuild + "</li>", err => {if (err) {console.error(err)}});    
+            } 
         }
+        fs.appendFileSync('buildProtocol.html', "<ul>", err => {if (err) {console.error(err)}}); 
 
-        ScrollAdslotIntoView();
+        
+//1b. AdSlots NOT found in adSSetup  DESKTOP
+        var addSlotsDesktopNotFound = "<h3>" + "AdSlots missing on the page:" + "<h/3>" + "<br>" + "<ul>"
+        fs.appendFileSync('buildProtocol.html', addSlotsDesktopNotFound, err => {if (err) {console.error(err)}}); 
+
+        for (var i = 0; i < adSlots.length; i++) {
+            var selector = adSlots[i];
+            var slotFound = await page.evaluate( async (selector) => {
+                var slot = document.getElementById(selector);
+                return slot ? true : false
+            }, selector);
+
+            if (!slotFound) {
+            fs.appendFileSync('buildProtocol.html', "<li>" + adSlots[i] + "</li>" , err => {if (err) {console.error(err)}});    
+            } 
+        }
+        fs.appendFileSync('buildProtocol.html', "<ul>", err => {if (err) {console.error(err)}}); 
+//2a. AdSlots found in adSSetup Mobile
+        await page.setViewport({ 
+            //Desktop size
+            width: 414, 
+            height: 896, 
+            });
+
+        var addSlotsMobile = "<h2>" + "Check AdSlots (Mobile)" + "</h2>"+ "<br>"
+        var addSlotsMobileFound = "<h3>" + "AdSlots found in adSSetup:" + "<h/3>" + "<br>" + "<ul>"
+        fs.appendFileSync('buildProtocol.html', addSlotsMobile + addSlotsMobileFound, err => {if (err) {console.error(err)}}); 
+        
+        for (var i = 0; i < adSlots.length; i++) {
+            console.log("current slot ", adSlots[i])
+            // check if slot exists
+            var selector = adSlots[i];
+            var slotFound = await page.evaluate( async (selector) => {
+                var slot = document.getElementById(selector);
+                return slot ? true : false
+            }, selector);
+
+            console.log("selector found ", slotFound)
+            // if slot exists - append to build.html
+            if (slotFound) {
+                await ScrollAdslotIntoView(page, adSlots[i]);
+                adSlotBuild = adSlots[i] + " ";
+                fs.appendFileSync('buildProtocol.html', "<li>" + adSlotBuild + "</li>" , err => {if (err) {console.error(err)}});    
+            } 
+        }
+        fs.appendFileSync('buildProtocol.html', "<ul>", err => {if (err) {console.error(err)}}); 
+
+        
+//2b. AdSlots NOT found in adSSetup  Mobile
+        var addSlotsMobileNotFound = "<h3>" + "AdSlots missing on the page:" + "<h/3>" + "<br>" + "<ul>"
+        fs.appendFileSync('buildProtocol.html', addSlotsMobileNotFound, err => {if (err) {console.error(err)}}); 
+
+        for (var i = 0; i < adSlots.length; i++) {
+            var selector = adSlots[i];
+            var slotFound = await page.evaluate( async (selector) => {
+                var slot = document.getElementById(selector);
+                return slot ? true : false
+            }, selector);
+
+            if (!slotFound) {
+            fs.appendFileSync('buildProtocol.html', "<li>" + adSlots[i] + "</li>", err => {if (err) {console.error(err)}});    
+            } 
+        }
+        fs.appendFileSync('buildProtocol.html', "<ul>", err => {if (err) {console.error(err)}}); 
 
     })
 })
+
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function GenerateHtmlProtocol() {
@@ -179,12 +214,11 @@ async function GetVersion() {
             const addVersion = msg._text.slice(6,15);
             const addVersionConcat = "<h3>" + "Testing with Adlib version" + addVersion + " (development)" + "</h3>" + "<br>"
             // console.log( "msg from function GetVersion()2:" + addVersionConcat );
-            fs.appendFile('buildProtocol.html', addVersionConcat, err => {if (err) {console.error(err)}})
+            fs.appendFileSync('buildProtocol.html', addVersionConcat, err => {if (err) {console.error(err)}})
         };
     });   
     await page.goto(url);
 }
-
 
 async function ScrollAdslotIntoView(page, _adSlot) {
     console.log("ScrollAdslotIntoView(" + _adSlot + ") was called");
