@@ -1,5 +1,7 @@
-//borrador
+//getting the adlib response and replacing the source to a xxx local file via page.on event.
+//it works for its purpose
 const puppeteer = require("puppeteer");
+
 
 var url = 'https://www.bild.de';
 

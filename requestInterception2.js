@@ -1,5 +1,8 @@
+//getting the adlib response and replacing the source to a xxx local file via network request interception with client.on
+//it works for its purpose
+
 //How to use: 1) npm test requestInterception2
-//2.  type the link in the Chromium Browser.
+//2.  type the URL link  in the Chromium Browser.
 const puppeteer = require('puppeteer');
 
 const scriptUrlPatterns = [
