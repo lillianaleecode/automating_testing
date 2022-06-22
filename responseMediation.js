@@ -1,6 +1,7 @@
 //Ad Delivery Mediation via Page.on event.
 //IT WORKS!
 const puppeteer = require("puppeteer");
+const fs = require('fs');
 
 var url = 'https://www.bild.de/gewinnspiele/bildplus-aktion/bild-feiert-den-70-geburtstag-taeglich-coupons-holen-sparen-80347132.bild.html';
 
@@ -65,11 +66,16 @@ var url = 'https://www.bild.de/gewinnspiele/bildplus-aktion/bild-feiert-den-70-g
             
             if (response._request._resourceType == "script" && response._url.includes("https://www.asadcdn.com/adlib/libmodules/extensions/mediation") ) {
               console.log(" ✅  Source of our own Mediation Script:" + await response._url);
+
+              fs.appendFileSync('buildProtocol.html',  "<li>" + " ✅  Source of our own Mediation Script:" + await response._url +  "</li>" , err => {if (err) {console.error(err)}})
               
             } 
             
             if (response._request._resourceType == "script" && response._url.includes("https://acdn.adnxs-simple.com/ast/mediation/") ) {
               console.log(" ❌ Default version source from Xandr Mediation Script:" + await response._url);
+
+              fs.appendFileSync('buildProtocol.html',  "<li>" + " ❌ Default version source from Xandr Mediation Script:" + await response._url +  "</li>" , err => {if (err) {console.error(err)}})
+
             }
           });
 

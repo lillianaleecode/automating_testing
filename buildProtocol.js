@@ -2,7 +2,7 @@
 const fs = require('fs');
 const puppeteer = require('puppeteer')
 
-var url = 'https://m.bild.de/sport/mehr-sport/boxen/heute-bei-bild-im-tv-ab-22-uhr-die-grosse-doku-ueber-felix-sturm-79503584.bildMobile.html###wt_ref=https%3A%2F%2Fwww.bild.de%2Fvideo%2Fmediathek%2Fvideo%2Fbild-live-71144736.bild.html&wt_t=1652095830144';
+var url = 'https://www.bild.de/gewinnspiele/bildplus-aktion/bild-feiert-den-70-geburtstag-taeglich-coupons-holen-sparen-80347132.bild.html';
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // //Append Adlib Version 
@@ -70,7 +70,7 @@ async function ScrollAdslotIntoView(page, _adSlot) {
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 describe('Create HTML Test Protocol ', () => {
-    it('HTML File Creation', async function() {
+    it('Check AdSlots', async function() {
 
         const browser = await puppeteer.launch({
             headless: false,
@@ -234,6 +234,8 @@ describe('Create HTML Test Protocol ', () => {
         }
         fs.appendFileSync('buildProtocol.html', "</ul>", err => {if (err) {console.error(err)}}); 
 
+   
+
 //3. CHECK FOR CONSOLE ERRORS
 //DESKTOP
         await page.setViewport({ 
@@ -267,11 +269,34 @@ describe('Create HTML Test Protocol ', () => {
             
         }
 
+//3. MEDIATION CHECK
+
+        fs.appendFileSync('buildProtocol.html',"<h2> Mediation Check: </h2>", err => {if (err) {console.error(err)}});
+
+        await page.on("response", async (response) => {
+            
+            if (response._request._resourceType == "script" && response._url.includes("https://www.asadcdn.com/adlib/libmodules/extensions/mediation") ) {
+              console.log(" ✅  Source of our own Mediation Script:" + await response._url);
+
+              fs.appendFileSync('buildProtocol.html',  "<li>" + " ✅  Source of our own Mediation Script:" + await response._url +  "</li>" , err => {if (err) {console.error(err)}})
+              
+            } 
+            
+            if (response._request._resourceType == "script" && response._url.includes("https://acdn.adnxs-simple.com/ast/mediation/") ) {
+              console.log(" ❌ Default version source from Xandr Mediation Script:" + await response._url);
+
+              fs.appendFileSync('buildProtocol.html',  "<li>" + " ❌ Default version source from Xandr Mediation Script:" + await response._url +  "</li>" , err => {if (err) {console.error(err)}})
+              
+            } 
+          });
+
+
+          await page.goto(url)  
 
         
 
-        
+    });
 
-    })
+    
 })
 
