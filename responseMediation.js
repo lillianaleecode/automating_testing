@@ -54,14 +54,14 @@ var url = 'https://www.bild.de/gewinnspiele/bildplus-aktion/bild-feiert-den-70-g
 
         }
 
-        await removeCMP();
+        
                 
 
 //getting page response.
 
        
 
-        await removeCMP();
+        
         page.on("response", async (response) => {
             
             if (response._request._resourceType == "script" && response._url.includes("https://www.asadcdn.com/adlib/libmodules/extensions/mediation") ) {
@@ -80,6 +80,7 @@ var url = 'https://www.bild.de/gewinnspiele/bildplus-aktion/bild-feiert-den-70-g
           });
 
            await page.goto(url)  
+           await removeCMP();
         
     });
   })
