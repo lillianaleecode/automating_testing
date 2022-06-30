@@ -2,7 +2,7 @@
 const fs = require('fs');
 const puppeteer = require('puppeteer')
 
-var url = 'https://www.bild.de/gewinnspiele/bildplus-aktion/bild-feiert-den-70-geburtstag-taeglich-coupons-holen-sparen-80347132.bild.html';
+var url = 'https://www.bild.de/regional/hamburg/hamburg-aktuell/ausbreitung-steigt-schon-49-affenpocken-faelle-in-hamburg-80554288.bild.html';
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // //Append Adlib Version 
@@ -239,6 +239,47 @@ describe('Create HTML Test Protocol ', () => {
 
 
     });
+
+    it('Check Console Errors', async function() {
+        //Puppeteer basic config
+        const browser = await puppeteer.launch({
+            headless: false, 
+            devtools: true
+        })
+        const page = await browser.newPage() 
+        //3. CHECK FOR CONSOLE ERRORS
+        //DESKTOP
+        await page.setViewport({ 
+            //Desktop size
+            width: 1920, 
+            height: 1800, 
+            });
+        await page.goto(url);
+
+        removeCmpLayer(page);
+
+        fs.appendFileSync('buildProtocol.html',"<h2> Check for console errors: </h2>  <h3> Errors from Adlib (1): <h/3> ", err => {if (err) {console.error(err)}}); 
+
+        const logs = [];
+        let text = page.on('console', async (msg) => {
+            var location = msg.location();
+            var source = "unknown";
+            if (typeof location == "object" && location.url != ""){
+                source = location.url;
+            }
+            console.log("console." + msg._type + "(" + msg._text + "(")
+            if (msg._type == "error"){
+                fs.appendFileSync('buildProtocol.html',  "<li>" + msg._type +" "+ msg._text +  "</li>" , err => {if (err) {console.error(err)}});;
+
+            }
+        
+        });
+
+        for (let i = 0; i < logs.length; i++) {
+                text +=  logs[i] }
+
+    })
+
     it('Mediation Script Check', async function() {
         //Puppeteer basic config
                 const browser = await puppeteer.launch({
@@ -287,14 +328,16 @@ describe('Create HTML Test Protocol ', () => {
         
                 }
         
-                await removeCMP();
+                
                         
         
         //getting page response.
+
+       fs.appendFileSync('buildProtocol.html',"<h2> Check for Mediation Source: </h2> ", err => {if (err) {console.error(err)}}); 
         
                
         
-                await removeCMP();
+                
                 page.on("response", async (response) => {
                     
                     if (response._request._resourceType == "script" && response._url.includes("https://www.asadcdn.com/adlib/libmodules/extensions/mediation") ) {
@@ -312,51 +355,12 @@ describe('Create HTML Test Protocol ', () => {
                     }
                   });
         
-                   await page.goto(url)  
+                   await page.goto(url);  
+                   await removeCMP();
                 
             });
             
-    it('Check Console Errors', async function() {
-        //Puppeteer basic config
-        const browser = await puppeteer.launch({
-            headless: false, 
-            devtools: true
-          })
-          const page = await browser.newPage() 
-        //3. CHECK FOR CONSOLE ERRORS
-//DESKTOP
-await page.setViewport({ 
-    //Desktop size
-    width: 1920, 
-    height: 1800, 
-    });
-await page.goto(url);
 
-removeCmpLayer(page);
-
-fs.appendFileSync('buildProtocol.html',"<h2> Check for console errors: </h2>  <h3> Errors from Adlib (1): <h/3> ", err => {if (err) {console.error(err)}}); 
-
-const logs = [];
-let text = page.on('console', async (msg) => {
-    var location = msg.location();
-    var source = "unknown";
-    if (typeof location == "object" && location.url != ""){
-        source = location.url;
-    }
-    console.log("console." + msg._type + "(" + msg._text + "(")
-    if (msg._type == "error"){
-        fs.appendFileSync('buildProtocol.html',  "<li>" + msg._type +" "+ msg._text +  "</li>" , err => {if (err) {console.error(err)}});;
-
-    }
-   
-});
-
-for (let i = 0; i < logs.length; i++) {
-        text +=  logs[i]  ;
-    
-}
-
-    })
 
 
     
