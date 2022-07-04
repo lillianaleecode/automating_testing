@@ -92,8 +92,9 @@ describe('Puppeteer for AdTech', () => {
         }
             
         // call function (Rect position of DOM elements):
-        await positionDOMElement('#sky', 1);
         await positionDOMElement('#sky_btf', 1);
+
+       
         
     });
 
