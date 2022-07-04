@@ -240,6 +240,82 @@ describe('Create HTML Test Protocol ', () => {
 
     });
 
+    it('Check AdSlot sky_btf', async function() {
+
+        const browser = await puppeteer.launch({
+            headless: false,
+            devtools: true,
+        })
+        const page = await browser.newPage() 
+
+        this.timeout(0);
+
+        await page.setDefaultTimeout(0);
+
+        await page.setViewport({    
+            width: 1920, 
+            height: 1800, 
+        });
+
+        await page.goto(url);
+        removeCmpLayer(page);
+
+        //item array to find: 
+        const adSlots = ['sky',
+            'sky_btf']
+        console.log("adSlots array = ", adSlots)
+
+        fs.appendFileSync('buildProtocol.html',"<h2> Check sky_btf Ad Slot </h2>  ", err => {if (err) {console.error(err)}});
+
+        //1a. check if Sky is found in adSSetup DESKTOP       
+        for (var i = 0; i < adSlots.length; i++) {
+            console.log("current slot ", adSlots[i])
+            
+            var selector = adSlots[i];
+            var slotFound = await page.evaluate( async (selector) => {
+                var slot = document.getElementById(selector);
+                return slot ? true : false
+            }, selector);
+
+            console.log("selector found ", slotFound)
+            fs.appendFileSync('buildProtocol.html',"<p> Ad Slot " + adSlots[i] + " was found</p> ", err => {if (err) {console.error(err)}});
+        }
+
+        // Check that the page min height has to be 5000px
+        const htmlHeight = await page.evaluate(() => {
+
+            return document.getElementById("__layout").offsetHeight;    
+            });
+
+            if (htmlHeight <= 5000){
+                console.log(" ❌ Page's height is: " + htmlHeight + " minimum height of 5000px is not fulfilled; therefore, no enough place for two Sky slots.")
+
+                fs.appendFileSync('buildProtocol.html',"<p> ❌ Page's minimum height of 5000px is not fulfilled; therefore, no enough place for two Sky slots. </p>" + "<p> Page height= " + htmlHeight + "px </p>", err => {if (err) {console.error(err)}});
+            }
+            console.log("1) Page's height is: " + htmlHeight);
+
+            if (htmlHeight > 5000){
+                console.log(" ✅  Page's height is: " + htmlHeight + ". minimum height of 5000px is fulfilled; therefore, there is enough place for two Sky slots.")
+                fs.appendFileSync('buildProtocol.html',"<p> ✅ Page's minimum height of 5000px isfulfilled; therefore, there is place for two Sky slots. </p>" + "<p> Page height= " + htmlHeight + "px </p>", err => {if (err) {console.error(err)}});
+            }
+
+        // Check Sky_btf placement (should not be rendered earlier than 2500px from the top of the page)
+        async function positionDOMElement(selector, padding = 0) {
+            const rect = await page.evaluate(selector => {
+            const element = document.querySelector(selector);
+            const { x, y, width, height } = element.getBoundingClientRect();
+            return { left: x, top: y, width, height, id: element.id };
+            }, selector);
+            console.log('rect: ', rect);
+           
+        }
+            
+        // call function (Rect position of DOM elements):
+        await positionDOMElement('#sky_btf', 1);
+        //pending: how can I add this object promise into this protocol.html file?
+        
+    });
+
     it('Check Console Errors', async function() {
         //Puppeteer basic config
         const browser = await puppeteer.launch({
